@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Facebook</title>
+    <!-- CSS only -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+</head>
+<body>
+      {% include 'include/header.html' %}
+      <div class="main bg-light">
+        <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px; position: fixed; ">
+            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+              <svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+              <span class="fs-4">Facebook</span>
+            </a>
+            <hr>
+            <ul class="nav nav-pills flex-column mb-auto">
+              <li class="nav-item">
+                <a href="#" class="nav-link active" aria-current="page">
+                  <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                  Главная
+                </a>
+              </li>
+              <li>
+                <a href="#" class="nav-link link-dark">
+                  <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                  Видео
+                </a>
+              </li>
+              <li>
+                <a href="#" class="nav-link link-dark">
+                  <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+                  Маркет
+                </a>
+              </li>
+            </ul>
+            <hr>
+            <div class="dropdown">
+              <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                <strong>mdo</strong>
+              </a>
+              <ul class="dropdown-menu text-small shadow">
+                <li><a class="dropdown-item" href="#">New project...</a></li>
+                <li><a class="dropdown-item" href="#">Settings</a></li>
+                <li><a class="dropdown-item" href="#">Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Sign out</a></li>
+              </ul>
+            </div>
+          </div>
+        <div class="center_block">
+          {% for post in posts %}
+            <div class="card" style="width: 30rem;">
+              {% if post.image %}
+              <a href="{% url 'post_detail' post.id %}" style="text-decoration:none; color: black"><img src="{{ post.image.url }}" class="card-img-top" alt="..."></a>
+              {% else %}
+              <a href="{% url 'post_detail' post.id %}" style="text-decoration:none; color: black"><img src="http://karpress.uz/wp-content/themes/karpress/assets/img/no_thumb_post.png" class="card-img-top" alt="..."></a>
+              {% endif %}
+                <div class="card-body">
+                  <a href="{% url 'post_detail' post.id %}" style="text-decoration:none; color: black"><h5 class="card-title">{{ post.title }}</h5></a>
+                  <a href="{% url 'post_detail' post.id %}" style="text-decoration:none; color: black"><p class="card-text">{{ post.description|truncatewords:10 }}</p></a>
+                  
+                  <a href="#" class="btn btn-primary">Лайк</a>
+                  <a href="comment.html" class="btn btn-primary">Коментарии</a>
+                  <a href="{% url 'user_detail' post.user.id %}" class="btn btn-secondary">@{{ post.user }}</a>
+                </div>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-light" style="width: 380px;">
+            <a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+              <svg class="bi pe-none me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+              <span class="fs-5 fw-semibold">Вам понравится</span>
+            </a>
+            <div class="list-group list-group-flush border-bottom scrollarea">
+              {% for post in posts %}
+              <a href="{% url 'post_detail' post.id %}" class="list-group-item list-group-item-action py-3 lh-sm" aria-current="true">
+                <div class="d-flex w-100 align-items-center justify-content-between">
+                  <strong class="mb-1">{{ post.title|truncatewords:2 }}</strong>
+                  <small>{{ post.created }}</small>
+                </div>
+                <div class="col-10 mb-1 small">{{ post.description }}</div>
+              </a>
+              {% endfor %}
+            </div>
+          </div>
+    </div>
+      <div class="container">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+          <div class="col-md-4 d-flex align-items-center">
+            <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
+              <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+            </a>
+            <span class="mb-3 mb-md-0 text-muted">© 2022 Facebook, Inc</span>
+          </div>
+      
+          <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+            <li class="ms-3"><a href="#" class="nav-link px-2 text-muted">Твиттер</a></li>
+            <li class="ms-3"><a href="#" class="nav-link px-2 text-muted">Фейсбук</a></li>
+            <li class="ms-3"><a href="#" class="nav-link px-2 text-muted">Телеграм</a></li>
+          </ul>
+        </footer>
+      </div>
+      
+</body>
+</html>
